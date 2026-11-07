@@ -1,0 +1,1 @@
+[{"file": "real_hi_in.wav", "label": "Hindi", "real": true}, {"file": "real_ta_in.wav", "label": "Tamil", "real": true}, {"file": "real_bn_in.wav", "label": "Bengali", "real": true}, {"file": "mms_hi_in.wav", "label": "Hindi", "real": false}, {"file": "mms_ta_in.wav", "label": "Tamil", "real": false}, {"file": "mms_bn_in.wav", "label": "Bengali", "real": false}]

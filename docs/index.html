@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>asli: is this voice real? Synthetic-speech detection for Indian languages</title>
+<meta name="description" content="asli detects AI-generated and cloned speech in Indian languages, trained on real speech from 10 Indian languages against multiple TTS engines, tested on unseen voice-cloning models and on phone-line and WhatsApp-compressed audio. Runs in your browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="bar"><div class="wrap row">
+  <a class="logo" href="#"><span class="wave"><i></i><i></i><i></i><i></i><i></i></span>asli <span class="dev">असली</span></a>
+  <nav><a href="#lab">Try it</a><a href="#threat">Why</a><a href="#results">Results</a><a href="#method">Method</a><a href="https://github.com/rishikeshn-eng/asli">GitHub ↗</a></nav>
+</div></header>
+
+<section class="hero wrap">
+  <div class="tag">AI safety · synthetic media · 12 Indian languages</div>
+  <h1>“Beta, it's me. I'm in trouble.”<br><span>Is that voice real?</span></h1>
+  <p class="lede">Voice clones made from a few seconds of someone's WhatsApp voice note now drive “digital arrest” and family-emergency scams across India.
+    <b>asli</b> is a small detector for machine-generated speech in ten Indian languages, trained on real speech against two speech engines and tested
+    on speakers, engines and languages it never saw, through phone lines and WhatsApp compression. It is also an honest measurement of
+    where detection stops working: <b>it catches an unseen text-to-speech engine, but not an unseen zero-shot voice-cloning model.</b></p>
+  <div class="kpis" id="kpis"></div>
+</section>
+
+<section id="lab" class="wrap">
+  <div class="lab">
+    <div class="lab-head">
+      <div class="src">
+        <label class="btn"><input type="file" id="file" accept="audio/*,.ogg,.opus,.m4a,.mp3,.wav" hidden>Upload audio</label>
+        <button class="btn" id="rec">● Record 6 s</button>
+        <span class="or">or a sample:</span>
+        <div id="samples" class="samples"></div>
+      </div>
+      <div class="state" id="state">loading model…</div>
+    </div>
+    <div class="scope">
+      <canvas id="spec" width="1200" height="260"></canvas>
+      <canvas id="timeline" width="1200" height="34"></canvas>
+      <div class="axis" id="axis"></div>
+    </div>
+    <div class="readout">
+      <div class="gauge"><svg viewBox="0 0 200 110"><path d="M10 100 A90 90 0 0 1 190 100" class="g-bg"/><path id="garc" d="M10 100 A90 90 0 0 1 190 100" class="g-fg"/></svg>
+        <div class="g-val" id="gval">–</div><div class="g-lbl">P(synthetic)</div></div>
+      <div class="verdict" id="verdict"><div class="v-title">Waiting for audio</div>
+        <div class="v-sub">Your audio is analysed in this tab. Nothing is uploaded.</div></div>
+      <audio id="player" controls></audio>
+    </div>
+  </div>
+  <p class="fine">The demo runs the exact model from the repository (589k parameters, ONNX) on 4-second windows. Treat the score as evidence, not proof:
+    if a call asks for money or OTPs, hang up and call the person back on a number you know.</p>
+</section>
+
+<section id="threat" class="wrap sec">
+  <div class="tag">Why this matters</div>
+  <h2>The detectors people can download don't speak Hindi.</h2>
+  <div class="cols3">
+    <div><b>Cloning is cheap.</b> Open models clone a voice from ~6 seconds of audio, in Hindi, with no technical skill.</div>
+    <div><b>Calls are lossy.</b> Scam audio arrives over 8 kHz phone lines or as Opus-compressed voice notes, which erases the high-frequency artefacts most detectors rely on.</div>
+    <div><b>Data is English.</b> Public anti-spoofing benchmarks (ASVspoof and similar) are mostly English read speech recorded in clean conditions.</div>
+  </div>
+</section>
+
+<section id="results" class="wrap sec">
+  <div class="tag">Evaluation · speaker-disjoint test set</div>
+  <h2>How well does it hold up?</h2>
+  <p class="note" id="evalNote"></p>
+  <div class="grid2">
+    <div class="panel"><div class="p-t">Error rate by channel</div><div class="p-s">equal error rate (lower is better), real vs all synthetic</div><div id="chanChart"></div></div>
+    <div class="panel"><div class="p-t">Engines it never saw in training</div><div class="p-s">equal error rate per generator, clean audio</div><div id="genChart"></div></div>
+  </div>
+  <div class="panel" style="margin-top:18px"><div class="p-t">By language</div><div class="p-s" id="langSub"></div><div id="langGrid" class="langs"></div></div>
+  <div class="panel" style="margin-top:18px"><div class="p-t">Against open-source detectors on the same test set</div><div class="p-s">AUROC (higher is better; 50% = coin flip)</div><div id="baseTbl"></div></div>
+  <div class="panel shortcut" style="margin-top:18px" id="shortcut"></div>
+</section>
+
+<section id="method" class="wrap sec">
+  <div class="tag">Method</div>
+  <h2>Built so it can't cheat</h2>
+  <ol class="steps">
+    <li><b>Same words, real and fake.</b> Every synthetic clip reads a sentence a real FLEURS speaker also read, so the model can't win by recognising content.</li>
+    <li><b>Same processing.</b> Every clip is silence-trimmed, loudness-normalised and cut to 4 s; level and silence carry no label.</li>
+    <li><b>Codec history neutralised.</b> One engine's audio arrives as MP3, so 45% of real training clips go through the identical MP3 encoder. We then test real speech through that encoder (see the shortcut test above).</li>
+    <li><b>Hard test.</b> Speakers never seen in training, two engines never seen (Google TTS, XTTS-v2 zero-shot voice cloning), two languages never seen (Odia, Assamese), and five channels: clean, phone G.711, WhatsApp-like Opus 12 kbps, MP3 32 kbps, 10 dB noise.</li>
+  </ol>
+  <div id="dataStats" class="datastats"></div>
+  <pre class="code">pip install -e .
+asli voice_note.ogg              # REAL / SYNTHETIC / UNCERTAIN, with a per-window timeline
+asli --json call_recording.mp3</pre>
+</section>
+
+<footer class="wrap">
+  <p>Real speech: Google FLEURS (CC-BY 4.0). Sample synthetic clips: Meta MMS-TTS (CC-BY-NC 4.0). Voice-clone test audio (XTTS-v2, Coqui Public Model License) was used for evaluation only and is not distributed.
+    Built by Rishikesh · MIT licensed · <a href="https://github.com/rishikeshn-eng/asli">source &amp; reproduction</a></p>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.20.1/dist/ort.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

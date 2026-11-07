@@ -1,0 +1,250 @@
+{
+ "kpis": [
+  {
+   "v": "2.8%",
+   "l": "equal error rate on speakers it never heard (clean)"
+  },
+  {
+   "v": "2.5%",
+   "l": "through an 8 kHz phone line"
+  },
+  {
+   "v": "99%",
+   "l": "AUROC on Google TTS, an engine it never saw"
+  },
+  {
+   "v": "66%",
+   "l": "AUROC on XTTS-v2 voice clones it never saw: not solved"
+  }
+ ],
+ "channels": {
+  "clean": {
+   "eer": 0.0277,
+   "auroc": 0.994
+  },
+  "phone": {
+   "eer": 0.0255,
+   "auroc": 0.9949
+  },
+  "opus": {
+   "eer": 0.0244,
+   "auroc": 0.9937
+  },
+  "mp3": {
+   "eer": 0.0227,
+   "auroc": 0.9945
+  },
+  "noise": {
+   "eer": 0.1005,
+   "auroc": 0.965
+  }
+ },
+ "generators": {
+  "edge": {
+   "label": "Microsoft neural voices",
+   "eer": 0.0027,
+   "auroc": 0.9999,
+   "seen": true
+  },
+  "gtts": {
+   "label": "Google TTS",
+   "eer": 0.0371,
+   "auroc": 0.9906,
+   "seen": false
+  },
+  "mms": {
+   "label": "Meta MMS-TTS",
+   "eer": 0.0125,
+   "auroc": 0.9993,
+   "seen": true
+  },
+  "xtts": {
+   "label": "XTTS-v2 voice clone",
+   "eer": 0.3853,
+   "auroc": 0.6592,
+   "seen": false
+  }
+ },
+ "languages": {
+  "as_in": {
+   "name": "Assamese",
+   "n": 1134,
+   "eer": 0.0,
+   "flag_rate": null,
+   "unseen": true
+  },
+  "bn_in": {
+   "name": "Bengali",
+   "n": 1639,
+   "eer": 0.0543,
+   "flag_rate": null,
+   "unseen": false
+  },
+  "gu_in": {
+   "name": "Gujarati",
+   "n": 1649,
+   "eer": 0.0117,
+   "flag_rate": null,
+   "unseen": false
+  },
+  "hi_in": {
+   "name": "Hindi",
+   "n": 1121,
+   "eer": 0.0764,
+   "flag_rate": null,
+   "unseen": false
+  },
+  "kn_in": {
+   "name": "Kannada",
+   "n": 1482,
+   "eer": 0.0033,
+   "flag_rate": null,
+   "unseen": false
+  },
+  "ml_in": {
+   "name": "Malayalam",
+   "n": 1602,
+   "eer": 0.0044,
+   "flag_rate": null,
+   "unseen": false
+  },
+  "mr_in": {
+   "name": "Marathi",
+   "n": 1664,
+   "eer": 0.0224,
+   "flag_rate": null,
+   "unseen": false
+  },
+  "or_in": {
+   "name": "Odia",
+   "n": 1033,
+   "eer": 0.0123,
+   "flag_rate": null,
+   "unseen": true
+  },
+  "pa_in": {
+   "name": "Punjabi",
+   "n": 874,
+   "eer": 0.0059,
+   "flag_rate": null,
+   "unseen": false
+  },
+  "ta_in": {
+   "name": "Tamil",
+   "n": 1297,
+   "eer": 0.0249,
+   "flag_rate": null,
+   "unseen": false
+  },
+  "te_in": {
+   "name": "Telugu",
+   "n": 1074,
+   "eer": 0.055,
+   "flag_rate": null,
+   "unseen": false
+  },
+  "ur_pk": {
+   "name": "Urdu",
+   "n": 827,
+   "eer": 0.0,
+   "flag_rate": null,
+   "unseen": false
+  }
+ },
+ "baselines": [
+  {
+   "name": "asli (ours)",
+   "params": "0.6M",
+   "clean": 0.994,
+   "phone": 0.9949,
+   "opus": 0.9937,
+   "unseen": 0.9762,
+   "clones": 0.6592,
+   "us": true
+  },
+  {
+   "name": "Gustking/wav2vec2-large-xlsr-deepfake-audio-classification",
+   "params": "316M",
+   "clean": 0.9834,
+   "phone": 0.9636,
+   "opus": 0.9735,
+   "unseen": 0.9642,
+   "clones": 0.8186
+  },
+  {
+   "name": "MelodyMachine/Deepfake-audio-detection-V2",
+   "params": "95M",
+   "clean": 0.4128,
+   "phone": 0.237,
+   "opus": 0.4113,
+   "unseen": 0.3776,
+   "clones": 0.3968
+  },
+  {
+   "name": "mo-thecreator/Deepfake-audio-detection",
+   "params": "95M",
+   "clean": 0.8106,
+   "phone": 0.6151,
+   "opus": 0.7967,
+   "unseen": 0.8053,
+   "clones": 0.4442
+  }
+ ],
+ "shortcut": {
+  "real_clean_fpr": 0.013963360142984807,
+  "real_through_edge_mp3_fpr": 0.012064343163538873
+ },
+ "threshold": 0.5,
+ "lang_sub": "equal error rate per language on clean audio; dashed = languages never used in training (only MMS fakes exist for them, so a flag rate is shown when one class is missing)",
+ "eval_note": "Test set: 8,952 real clips from FLEURS speakers never seen in training and 6,444 synthetic clips. Equal error rate = the point where false alarms equal misses. Operating threshold picked on the dev set.",
+ "data": [
+  {
+   "v": "25,567",
+   "l": "real training clips (FLEURS, 10 languages)"
+  },
+  {
+   "v": "16,922",
+   "l": "synthetic training clips (2 engines)"
+  },
+  {
+   "v": "15,396",
+   "l": "test clips \u00d7 5 channels"
+  },
+  {
+   "v": "4",
+   "l": "speech engines (2 held out)"
+  }
+ ],
+ "samples": [
+  {
+   "file": "real_hi_in.wav",
+   "label": "Hindi",
+   "real": true
+  },
+  {
+   "file": "real_ta_in.wav",
+   "label": "Tamil",
+   "real": true
+  },
+  {
+   "file": "real_bn_in.wav",
+   "label": "Bengali",
+   "real": true
+  },
+  {
+   "file": "mms_hi_in.wav",
+   "label": "Hindi",
+   "real": false
+  },
+  {
+   "file": "mms_ta_in.wav",
+   "label": "Tamil",
+   "real": false
+  },
+  {
+   "file": "mms_bn_in.wav",
+   "label": "Bengali",
+   "real": false
+  }
+ ]
+}

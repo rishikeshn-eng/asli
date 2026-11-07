@@ -1,0 +1,11 @@
+{
+ "threshold": 0.5,
+ "dev_eer_pooled": 0.0075592292180225,
+ "dev_auroc_pooled": 0.9995939868874028,
+ "sample_rate": 16000,
+ "window_samples": 64000,
+ "hop_samples": 32000,
+ "trained_on": "FLEURS (10 Indian languages) vs MMS-TTS + Microsoft neural voices",
+ "params": 589344,
+ "dev_eer_threshold": 0.9843436479568481
+}

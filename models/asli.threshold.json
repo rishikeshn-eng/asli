@@ -1,0 +1,7 @@
+{
+ "threshold": 0.5,
+ "dev_eer_pooled": 0.0075592292180225,
+ "dev_auroc_pooled": 0.9995939868874028,
+ "dev_eer_threshold": 0.9843436479568481,
+ "note": "Operating threshold = sigmoid midpoint. The dev-set EER threshold (0.98) is tuned on the two training engines only and was far too strict for unseen engines (Google TTS caught 52% vs 78% at 0.5, at 1.4% vs 0.6% false alarms)."
+}
