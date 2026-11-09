@@ -105,6 +105,9 @@ from asli import Detector
 Detector().analyse("call.mp3")      # {'verdict': 'synthetic', 'p_synthetic': 0.94, 'windows': [...]}
 ```
 
+Tests: `pip install -e ".[dev]" && pytest` runs the detector tests, including the six demo clips, with no PyTorch.
+Add the training extra (`pip install -e ".[dev,train]"`) to also run the model-definition tests.
+
 ## Reproduce
 
 ```

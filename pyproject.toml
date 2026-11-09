@@ -12,6 +12,7 @@ requires-python = ">=3.10"
 dependencies = ["numpy", "scipy", "onnxruntime>=1.17"]
 
 [project.optional-dependencies]
+dev = ["pytest"]
 train = ["torch", "torchaudio", "soundfile", "scikit-learn", "transformers", "edge-tts", "gTTS"]
 
 [project.scripts]
